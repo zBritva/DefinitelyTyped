@@ -826,11 +826,11 @@ interface Obj {
         b: string;
     }
 
-    R.map<A, A>(R.inc, {a: 1, b: 2});
-    R.map<A, B>(R.toString, {a: 1, b: 2});
+    R.map(R.inc, {a: 1, b: 2}); // $ExpectType { a: number, b: number }
+    R.map(R.toString, {a: 1, b: 2}); // $ExpectType { a: string, b: string }
 
-    R.map<A, A>(R.inc)({a: 1, b: 2});
-    R.map<A, B>(R.toString)({a: 1, b: 2});
+    R.map(R.inc)({a: 1, b: 2}); // $ExpectType { a: number, b: number }
+    R.map(R.toString)({a: 1, b: 2}); // $ExpectType { a: string, b: string }
 };
 
 () => {
