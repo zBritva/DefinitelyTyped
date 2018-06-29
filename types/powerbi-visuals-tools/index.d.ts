@@ -1,4 +1,4 @@
-// Type definitions for Powerbi-visuals-tools 1.11
+// Type definitions for Powerbi-visuals-tools 1.12
 // Project: https://github.com/Microsoft/PowerBI-visuals-tools
 // Definitions by:  Ilfat Galiev <https://github.com/zBritva>
 //                  Microsoft <https://github.com/Microsoft>
@@ -1326,6 +1326,7 @@ declare namespace powerbi.extensibility.visual {
         locale: string;
         allowInteractions: boolean;
         launchUrl: (url: string) => void;
+        fetchMoreData: () => boolean;
         refreshHostData: () => void;
         createLocalizationManager: () => ILocalizationManager;
     }
@@ -1335,6 +1336,7 @@ declare namespace powerbi.extensibility.visual {
         dataViews: DataView[];
         viewMode?: ViewMode;
         editMode?: EditMode;
+        operationKind?: VisualDataChangeOperationKind;
     }
 
     interface VisualConstructorOptions extends extensibility.VisualConstructorOptions {

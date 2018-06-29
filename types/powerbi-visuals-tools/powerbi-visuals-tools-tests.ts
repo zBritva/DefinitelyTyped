@@ -20,6 +20,23 @@ const visualPlugin: IVisualPlugin = {
 import ISelectionIdBuilder = powerbi.visuals.ISelectionIdBuilder;
 import ISelectionId = powerbi.visuals.ISelectionId;
 
+const selection: ISelectionId = {
+    equals: (sel: ISelectionId) => false,
+    includes: (sel: ISelectionId, ignoreHL: boolean) => false,
+    getKey: () => "string",
+    getSelector: () => {
+        const selector: powerbi.data.Selector = {
+        };
+        return selector;
+    },
+    getSelectorsByColumn: () => {
+        const selector: powerbi.data.SelectorsByColumn = {
+        };
+        return selector;
+    },
+    hasIdentity: () => false
+};
+
 const selectionBuilder: ISelectionIdBuilder = {
     withCategory: (categoryColumn: powerbi.DataViewCategoryColumn, index: number): ISelectionIdBuilder => {
         return selectionBuilder;
@@ -30,25 +47,7 @@ const selectionBuilder: ISelectionIdBuilder = {
     withMeasure: (measure: string): ISelectionIdBuilder => {
         return selectionBuilder;
     },
-    createSelectionId: (): ISelectionId => {
-        const selection: ISelectionId = {
-            equals: (sel: ISelectionId) => false,
-            includes: (sel: ISelectionId, ignoreHL: boolean) => false,
-            getKey: () => "string",
-            getSelector: () => {
-                const selector: powerbi.data.Selector = {
-                };
-                return selector;
-            },
-            getSelectorsByColumn: () => {
-                const selector: powerbi.data.SelectorsByColumn = {
-                };
-                return selector;
-            },
-            hasIdentity: () => false
-        };
-        return selection;
-    }
+    createSelectionId: (): ISelectionId => selection
 };
 
 import DataView = powerbi.DataView;
@@ -107,4 +106,79 @@ const dataView: DataView = {
         ],
         values: undefined
     }
+};
+
+import IColorPalette = powerbi.extensibility.IColorPalette;
+import IColorInfo = powerbi.IColorInfo;
+
+const testIColorPalette: IColorPalette = {
+    getColor: (key: string) => {
+        const result: IColorInfo = {value: key};
+        return result;
+    }
+};
+
+import ISelectionManager = powerbi.extensibility.ISelectionManager;
+
+const testISelectionManager: ISelectionManager = {
+    select: (selectionId: powerbi.visuals.ISelectionId | powerbi.visuals.ISelectionId[], multiSelect?: boolean) => (1 as any),
+    hasSelection: () => false,
+    clear: () => (0 as any),
+    getSelectionIds: () => [selection],
+    applySelectionFilter: () => {},
+    registerOnSelectCallback: (callback: (ids: powerbi.visuals.ISelectionId[]) => void) => {}
+};
+
+import ITooltipService = powerbi.extensibility.ITooltipService;
+import TooltipShowOptions = powerbi.extensibility.TooltipShowOptions;
+import TooltipMoveOptions = powerbi.extensibility.TooltipMoveOptions;
+import TooltipHideOptions = powerbi.extensibility.TooltipHideOptions;
+
+const testITooltipService: ITooltipService = {
+    enabled: () => true,
+    show: (options: TooltipShowOptions) => {},
+    move: (options: TooltipMoveOptions) => {},
+    hide: (options: TooltipHideOptions) => {}
+};
+
+import ITelemetryService = powerbi.extensibility.ITelemetryService;
+import VisualEventType = powerbi.VisualEventType;
+
+const testITelemetryService: ITelemetryService = {
+    instanceId: "",
+    trace: (type: VisualEventType, payload?: string) => {}
+};
+
+import IAuthenticationService = powerbi.extensibility.IAuthenticationService;
+
+const testIAuthenticationService: IAuthenticationService = {
+    getAADToken: (visualId?: string) => {
+        return null as any;
+    }
+};
+
+import ILocalizationManager = powerbi.extensibility.ILocalizationManager;
+
+const testILocalizationManager: ILocalizationManager = {
+    getDisplayName: (key: string) => key
+};
+
+import IVisualHost = powerbi.extensibility.visual.IVisualHost;
+
+const testIVisualHost: IVisualHost = {
+    instanceId: "",
+    createSelectionIdBuilder: () => selectionBuilder,
+    createSelectionManager: () => testISelectionManager,
+    colorPalette: testIColorPalette,
+    persistProperties: (changes: powerbi.VisualObjectInstancesToPersist) => {},
+    applyJsonFilter: (filter: powerbi.IFilter, objectName: string, propertyName: string, action: powerbi.FilterAction) => {},
+    tooltipService: testITooltipService,
+    telemetry: testITelemetryService,
+    authenticationService: testIAuthenticationService,
+    locale: "en-US",
+    allowInteractions: false,
+    launchUrl: (url: string) => {},
+    fetchMoreData: () => false,
+    refreshHostData: () => {},
+    createLocalizationManager: () => testILocalizationManager
 };
